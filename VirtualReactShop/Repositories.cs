@@ -7,14 +7,14 @@ namespace VirtualReactShop
     {
         protected abstract IEnumerable<T> ListImpl();
 
-        public IReadOnlyCollection<T> List(int page = 1, int pageSize = 50) => 
+        public virtual IReadOnlyCollection<T> List(int page = 1, int pageSize = 50) => 
             ListImpl()
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToArray();
     }
 
-    public class Repositories : Repository<Product>
+    public class ProductRepository : Repository<Product>
     {
         protected override IEnumerable<Product> ListImpl() => new[]
         {

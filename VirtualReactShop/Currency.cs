@@ -4,6 +4,8 @@ namespace VirtualReactShop
 {
     public class Currency
     {
+        public const string BASE_CURRENCY = "AUD";
+
         public Currency(string code, string name, double baseRate)
         {
             if (string.IsNullOrWhiteSpace(code)) throw new ArgumentNullException(nameof(code));

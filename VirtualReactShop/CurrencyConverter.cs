@@ -25,14 +25,14 @@ namespace VirtualReactShop
                 .ToDictionary(c => c.Code, c => c);
         }
 
-        public static double Convert(Product product, Currency from, Currency to) => product.PriceInBaseCurrency * (to.BaseExchangeRate / from.BaseExchangeRate);
+        public static double Convert(double price, Currency from, Currency to) => price * (to.BaseExchangeRate / from.BaseExchangeRate);
 
-        public double Convert(Product product, string from, string to)
+        public double Convert(double price, string from, string to)
         {
             if (!_currencies.TryGetValue(from, out var fromCurrency)) throw new CurrencyNotFoundException(from);
             if (!_currencies.TryGetValue(from, out var toCurrency)) throw new CurrencyNotFoundException(to);
 
-            return Convert(product, fromCurrency, toCurrency);
+            return Convert(price, fromCurrency, toCurrency);
         }
     }
 }
