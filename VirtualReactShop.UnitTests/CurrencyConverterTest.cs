@@ -18,6 +18,19 @@ namespace VirtualReactShop.UnitTests
             .Should()
             .Be(amount);
 
+        [Theory]
+        [InlineData(100)]
+        [InlineData(100)]
+        [InlineData(1000000)]
+        [InlineData(1000000)]
+        [InlineData(0.01)]
+        [InlineData(0.01)]
+        public void When_Converting_From_AUD_To_CNY_The_Amount_Is_As_Expected(double amount) => CreateCurrencyConverter()
+            .Convert(amount, from: "AUD", to: "CNY")
+            .Should()
+            .Be(amount * 5);
+
+
         private static CurrencyConverter CreateCurrencyConverter()
         {
             var currencies = new Mock<CurrencyRepository>();

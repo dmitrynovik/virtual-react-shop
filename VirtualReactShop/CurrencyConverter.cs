@@ -30,7 +30,7 @@ namespace VirtualReactShop
         public double Convert(double price, string from, string to)
         {
             if (!_currencies.TryGetValue(from, out var fromCurrency)) throw new CurrencyNotFoundException(from);
-            if (!_currencies.TryGetValue(from, out var toCurrency)) throw new CurrencyNotFoundException(to);
+            if (!_currencies.TryGetValue(to, out var toCurrency)) throw new CurrencyNotFoundException(to);
 
             return Convert(price, fromCurrency, toCurrency);
         }

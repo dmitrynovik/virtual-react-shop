@@ -18,7 +18,6 @@ namespace VirtualReactShop.UnitTests
             act.Should().Throw<ArgumentNullException>();
         }
 
-
         [Theory]
         [InlineData(1)]
         [InlineData(1000000)]
