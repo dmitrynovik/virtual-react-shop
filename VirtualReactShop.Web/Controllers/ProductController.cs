@@ -6,7 +6,7 @@ using VirtualReactShop;
 
 namespace virtual_react_shop.Controllers
 {
-    [Route("api/products/list")]
+    [Route("api/products")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -18,6 +18,7 @@ namespace virtual_react_shop.Controllers
         }
 
         [HttpGet]
+        [Route("list")]
         public IEnumerable<Product> List(int page = 1, int pageSize = 50) => _productRepository.List(page, pageSize);
     }
 

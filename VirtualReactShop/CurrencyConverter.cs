@@ -25,7 +25,10 @@ namespace VirtualReactShop
                 .ToDictionary(c => c.Code, c => c);
         }
 
-        public static double Convert(double price, Currency from, Currency to) => price * (to.BaseExchangeRate / from.BaseExchangeRate);
+        public double Convert(double price, Currency from, Currency to) => price * (to.BaseExchangeRate / from.BaseExchangeRate);
+
+        public double Convert(IEnumerable<Product> products, string from, string to) => Convert(products.Sum(p => p.PriceInBaseCurrency), from, to);
+
 
         public double Convert(double price, string from, string to)
         {

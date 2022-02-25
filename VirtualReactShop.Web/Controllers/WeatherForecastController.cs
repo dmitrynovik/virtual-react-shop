@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace virtual_react_shop.Controllers
 {
+    // TODO: remove
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
