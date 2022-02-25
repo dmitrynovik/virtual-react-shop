@@ -31,7 +31,6 @@ namespace virtual_react_shop
             });
 
             services.AddSingleton<CurrencyConverter>();
-            services.AddSingleton<ShoppingCart>();
             services.AddSingleton<ShippingCostCalculator>();
             services.AddSingleton<CurrencyRepository>();
             services.AddSingleton<ProductRepository>();
