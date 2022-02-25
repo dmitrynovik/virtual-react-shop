@@ -1,11 +1,15 @@
-﻿namespace VirtualReactShop
+﻿using System;
+
+namespace VirtualReactShop
 {
     public class Order
     {
-        public Order(Product product, uint qty = 1)
+        public Order(Product product, uint quantity = 1)
         {
+            if (quantity == 0) throw new ArgumentException("Quantity cannot be 0", nameof(quantity));
+            if (product == null) throw new ArgumentNullException(nameof(product));
             Product = product;
-            Quantity = qty;
+            Quantity = quantity;
         }
 
         public Product Product { get; }

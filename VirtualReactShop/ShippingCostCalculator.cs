@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using System;
 
 namespace VirtualReactShop
 {
@@ -32,7 +33,7 @@ namespace VirtualReactShop
             }
 
             var total = subtotal + shippingRate;
-            return _converter.Convert(total, Currency.BASE_CURRENCY /* AUD */, currencyCode);
+            return Math.Round( _converter.Convert(total, Currency.BASE_CURRENCY /* AUD */, currencyCode), 2);
         }
     }
 }

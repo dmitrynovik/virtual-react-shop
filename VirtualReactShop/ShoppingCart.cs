@@ -33,6 +33,8 @@ namespace VirtualReactShop
             }
         }
 
+        public uint Quantity(string productCode) => _orders.TryGetValue(productCode, out var order) ? order.Quantity : 0;
+
         public Maybe<Order> Remove(string productCode)
         {
             if (!_orders.ContainsKey(productCode))
