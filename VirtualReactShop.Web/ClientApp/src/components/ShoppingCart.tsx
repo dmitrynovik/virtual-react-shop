@@ -63,17 +63,18 @@ class ShoppingCart extends React.PureComponent<ShoppingCardProps> {
             <th>Quantity</th>
           </tr>
         </thead>
+        <tbody>
         {         
-          Array.from(this.props.products.keys()).map(productCode => 
+          this.props.products.map(order => 
             {
-            const order = this.props.products.get(productCode);
             return order && order.qty > 0 ?
-            <tr>
+            <tr key={order.code}>
               <td>{order.name}</td>
               <td>{order.qty}</td>
             </tr> : undefined;
             }
           )}
+        </tbody>
       </table>
     );
   }
@@ -82,10 +83,9 @@ class ShoppingCart extends React.PureComponent<ShoppingCardProps> {
     return (
       <select id="products" className="form-control" onChange={event => this.props.selectProduct(event.target.value)}>
           { 
-            Array.from(this.props.products.keys()).map(productCode => 
+            this.props.products.map(product => 
               {
-                const product = this.props.products.get(productCode);                
-                return product ? <option key={product.code} value={product.code}>{product.name}</option> : undefined;
+                return <option key={product.code} value={product.code}>{product.name}</option>;
               }
           )}
       </select>

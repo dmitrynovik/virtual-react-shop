@@ -19,7 +19,7 @@ export interface ShoppingCardState {
     currencies: Currency[];
     currency: string;    
     product: string;
-    products: Map<string, Product>;
+    products:Product[];
 }
 
 export interface ListCurrenciesAction { type: 'LIST_CURRENCIES' }
@@ -27,8 +27,8 @@ export interface ReceiveCurrenciesAction { type: 'RECEIVE_CURRENCIES', currencie
 export interface ListProductsAction   { type: 'LIST_PRODUCTS'; }
 export interface ReceiveProductsAction   { type: 'RECEIVE_PRODUCTS', products: Product[] }
 export interface SelectProductAction { type: 'SELECT_PRODUCT', productCode: string }
-export interface AddProductAction { type: 'ADD_PRODUCT', productCode: string, productName: string }
-export interface RemoveProductAction { type: 'REMOVE_PRODUCT', productCode: string }
+export interface AddProductAction { type: 'ADD_PRODUCT' }
+export interface RemoveProductAction { type: 'REMOVE_PRODUCT' }
 export interface ChangeCurrencyAction { type: 'CHANGE_CURRENCY', currencyCode: string }
 export interface ClearCartAction { type: 'CLEAR_CART' }
 export interface CheckoutAction { type: 'CHECKOUT' }
@@ -49,15 +49,18 @@ type KnownAction = ListCurrenciesAction |
 export const actionCreators = { 
 
     addProduct: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        const state = getState();
+        dispatch({type: 'ADD_PRODUCT'});
     },
 
     removeProduct: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        dispatch({type: 'REMOVE_PRODUCT'});
     },
 
     checkout: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
     },
 
-    selectCurrency: (code:string): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    selectCurrency: (code: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
         console.log('CHANGE_CURRENCY', code);
         dispatch({type: 'CHANGE_CURRENCY', currencyCode: code});
     },
@@ -109,7 +112,7 @@ const unloadedState: ShoppingCardState = {
     currency: 'AUD', // TODO: get from server 
     product: '',
     isLoading: false,
-    products: new Map<string, Product>()
+    products: []
 };
 
 export const reducer: Reducer<ShoppingCardState> = (state: ShoppingCardState | undefined, incomingAction: Action): ShoppingCardState => {
@@ -118,11 +121,6 @@ export const reducer: Reducer<ShoppingCardState> = (state: ShoppingCardState | u
     if (state === undefined) {
         return unloadedState;
     }
-
-    // TODO: remove
-    // const o1 = Array.from(state.orders.values());
-    // //const o2 = [...state.orders];
-    // const x = state.orders.values();
 
     const action = incomingAction as KnownAction;
     switch (action.type) {
@@ -134,9 +132,11 @@ export const reducer: Reducer<ShoppingCardState> = (state: ShoppingCardState | u
             return { ...state, isLoading: false, currencies: action.currencies };
 
         case 'RECEIVE_PRODUCTS':
-            const map = new Map<string, Product>();
-            action.products.forEach(p => map.set(p.code, p));
-            return { ...state, isLoading: false, products: map };
+            const products = action.products.map ( p => {
+                p.qty = 0;
+                return p;
+            });
+            return { ...state, isLoading: false, products: products };
 
         case 'CLEAR_CART':
             return unloadedState;
@@ -146,15 +146,25 @@ export const reducer: Reducer<ShoppingCardState> = (state: ShoppingCardState | u
 
         case 'SELECT_PRODUCT':
             return { ...state, product: action.productCode };    
-            
+
         case 'ADD_PRODUCT':
-            const products = state.products;
-            let order = products.get(action.productCode);
+            let order = state.products.find(p => p.code == state.product);
             if (order) {
                 order.qty = order.qty + 1;
-                products.set(action.productCode, order);
+                const products = state.products.filter(p => p.code != state.product);
+                return { ...state, products: [...products, order] };        
+            } else {
+                return { ...state, products: state.products };        
             }
-            return { ...state, products: products };        
+
+        case 'REMOVE_PRODUCT':
+            let orderToRemove = state.products.find(p => p.code == state.product);
+            if (orderToRemove) {
+                orderToRemove.qty = orderToRemove.qty - 1;
+                const products = state.products.filter(p => p.code != state.product);
+                return { ...state, products: [...products, orderToRemove] };        
+            }
+            return { ...state, products: state.products };            
         }
 
     return state;
