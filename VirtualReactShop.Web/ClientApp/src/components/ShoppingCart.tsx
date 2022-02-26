@@ -12,7 +12,7 @@ ShoppingCardStore.ShoppingCardState // ... state we've requested from the Redux 
   & RouteComponentProps<{  }>; // ... plus incoming routing parameters
 
 
-class FetchData extends React.PureComponent<ShoppingCardProps> {
+class ShoppingCart extends React.PureComponent<ShoppingCardProps> {
   // This method is called when the component is first added to the document
   public componentDidMount() {
     console.log('componentDidMount');
@@ -68,4 +68,4 @@ class FetchData extends React.PureComponent<ShoppingCardProps> {
 export default connect(
   (state: ApplicationState) => state.shoppingCart, // Selects which state properties are merged into the component's props
   ShoppingCardStore.actionCreators // Selects which action creators are merged into the component's props
-)(FetchData as any); // eslint-disable-line @typescript-eslint/no-explicit-any
+)(ShoppingCart as any); // eslint-disable-line @typescript-eslint/no-explicit-any
