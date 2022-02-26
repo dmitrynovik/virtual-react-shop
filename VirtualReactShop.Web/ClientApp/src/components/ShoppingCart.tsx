@@ -26,28 +26,67 @@ class ShoppingCart extends React.PureComponent<ShoppingCardProps> {
   }
 
   public render() {
+    console.log('rendering...');
+
     return (
       <React.Fragment>
+        <br />
         <h1 id="tabelLabel">Shopping card</h1>
         <h2>Currencies</h2>
         {this.renderCurrencies()}
+        <br />
         <h2>Products</h2>
         {this.renderProducts()}
+        <br />
+        <button className="btn btn-secondary btn-lg" onClick={() => this.props.addProduct() }>Add Product</button>&nbsp;
+        <button className="btn btn-secondary btn-lg" onClick={() => this.props.removeProduct() }>Remove Product</button>
+        <button className="btn btn-secondary btn-lg float-right" onClick={() => this.props.checkout() }>Checkout</button>
+        <br />
+        <br />
+        {this.renderOrders()}
       </React.Fragment>
     );
   }
 
   private ensureDataFetched() {
-    console.log('ensureDataFetched');
+    console.log('fetching data...');
     this.props.listCurrencies();
     this.props.listProducts();
   }
 
+  private renderOrders() {
+    return (
+      <table className="table">
+        <thead className="thead-dark">
+          <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        {         
+          Array.from(this.props.products.keys()).map(productCode => 
+            {
+            const order = this.props.products.get(productCode);
+            return order && order.qty > 0 ?
+            <tr>
+              <td>{order.name}</td>
+              <td>{order.qty}</td>
+            </tr> : undefined;
+            }
+          )}
+      </table>
+    );
+  }
+
   private renderProducts() {
     return (
-      <select id="products">
-          { this.props.products.map((product: ShoppingCardStore.Product) =>
-            <option key={product.code}>{product.name}</option>
+      <select id="products" className="form-control" onChange={event => this.props.selectProduct(event.target.value)}>
+          { 
+            Array.from(this.props.products.keys()).map(productCode => 
+              {
+                const product = this.props.products.get(productCode);                
+                return product ? <option key={product.code} value={product.code}>{product.name}</option> : undefined;
+              }
           )}
       </select>
     );
@@ -55,9 +94,9 @@ class ShoppingCart extends React.PureComponent<ShoppingCardProps> {
 
   private renderCurrencies() {
     return (
-      <select id="currencies">
+      <select id="currencies" className="form-control" onChange={event => this.props.selectCurrency(event.target.value)}>
           {this.props.currencies.map((currency: ShoppingCardStore.Currency) =>
-            <option key={currency.code}>{currency.name}</option>
+            <option key={currency.code} value={currency.code}>{currency.name}</option>
           )}
       </select>
     );

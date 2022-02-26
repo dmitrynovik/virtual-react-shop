@@ -3,6 +3,14 @@ a {
   color: #0366d6;
 }
 
+h1 {
+  text-align: center;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #808080;
+}
+
 code {
   color: #E01A76;
 }
