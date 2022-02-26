@@ -5,6 +5,10 @@ import { History } from 'history';
 import { ApplicationState, reducers } from './';
 
 export default function configureStore(history: History, initialState?: ApplicationState) {
+
+    console.log('initialState', initialState);
+    console.log('reducers', reducers);
+
     const middleware = [
         thunk,
         routerMiddleware(history)

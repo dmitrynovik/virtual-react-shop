@@ -1,8 +1,12 @@
+// TODO: remove
 import * as WeatherForecasts from './WeatherForecasts';
 import * as Counter from './Counter';
+import * as ShoppingCart from './ShoppingCart';
 
 // The top-level state object
 export interface ApplicationState {
+    shoppingCart: ShoppingCart.ShoppingCardState | undefined;
+    // TODO: remove
     counter: Counter.CounterState | undefined;
     weatherForecasts: WeatherForecasts.WeatherForecastsState | undefined;
 }
@@ -11,8 +15,10 @@ export interface ApplicationState {
 // the reducer with the matching name. It's important that the names match exactly, and that the reducer
 // acts on the corresponding ApplicationState property type.
 export const reducers = {
+    shoppingCart: ShoppingCart.reducer,
+    // TODO: remove
     counter: Counter.reducer,
-    weatherForecasts: WeatherForecasts.reducer
+    //weatherForecasts: WeatherForecasts.reducer
 };
 
 // This type can be used as a hint on action creators so that its 'dispatch' and 'getState' params are
