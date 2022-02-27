@@ -19,6 +19,8 @@ class Checkout extends React.PureComponent<ShoppingCardProps> {
         this.props.checkout();
 
         return <div>
+            <br />
+            <h1>Checkout complete</h1>
             <div>
                 <b>Total: {this.props.total}</b>
             </div>
