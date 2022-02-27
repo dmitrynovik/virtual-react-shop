@@ -61,6 +61,7 @@ class ShoppingCart extends React.PureComponent<ShoppingCardProps> {
           <tr>
             <th>Product</th>
             <th>Quantity</th>
+            <th>Subtotal</th>
           </tr>
         </thead>
         <tbody>
@@ -71,6 +72,7 @@ class ShoppingCart extends React.PureComponent<ShoppingCardProps> {
             <tr key={order.code}>
               <td>{order.name}</td>
               <td>{order.qty}</td>
+              <td>{this.props.calcPrice(order)}</td>
             </tr> : undefined;
             }
           )}

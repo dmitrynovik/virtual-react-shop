@@ -10,15 +10,15 @@ export interface Currency {
 export interface Product {
     code: string;
     name: string;
-    priceInBaseCurrency: string;
+    priceInBaseCurrency: number;
     qty: number;
 }
 
 export interface ShoppingCardState {
     isLoading: boolean;
     currencies: Currency[];
-    currency: string;    
-    product: string;
+    currentCurrency: Currency;    
+    currentProduct: Product | undefined;
     products:Product[];
 }
 
@@ -47,6 +47,12 @@ type KnownAction = ListCurrenciesAction |
     CalculateShippingAction;
 
 export const actionCreators = { 
+
+    calcPrice: (p: Product): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        const basePrice = Math.round(p.priceInBaseCurrency * p.qty * 100) / 100;
+        const state = getState();
+        return state.shoppingCart != undefined ? basePrice * state.shoppingCart.currentCurrency.baseExchangeRate : basePrice;
+    },
 
     addProduct: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const state = getState();
@@ -109,8 +115,8 @@ export const actionCreators = {
 
 const unloadedState: ShoppingCardState = { 
     currencies: [], 
-    currency: 'AUD', // TODO: get from server 
-    product: '',
+    currentCurrency: { code: 'AUD', name: 'Australian Dollar', baseExchangeRate: 1.0 },  // TODO: get from server 
+    currentProduct: undefined,
     isLoading: false,
     products: []
 };
@@ -142,26 +148,28 @@ export const reducer: Reducer<ShoppingCardState> = (state: ShoppingCardState | u
             return unloadedState;
 
         case 'CHANGE_CURRENCY':
-            return { ...state, currency: action.currencyCode };
+            const currentCurrency = state.currencies.find(c => c.code == action.currencyCode);
+            return { ...state, currentCurrency: currentCurrency || unloadedState.currentCurrency };
 
         case 'SELECT_PRODUCT':
-            return { ...state, product: action.productCode };    
+            const currentProduct = state.products.find(c => c.code == action.productCode);
+            return { ...state, currentProduct: currentProduct };    
 
         case 'ADD_PRODUCT':
-            let order = state.products.find(p => p.code == state.product);
+            let order = state.products.find(p => p.code == state.currentProduct?.code);
             if (order) {
                 order.qty = order.qty + 1;
-                const products = state.products.filter(p => p.code != state.product);
+                const products = state.products.filter(p => p.code != state?.currentProduct?.code);
                 return { ...state, products: [...products, order] };        
             } else {
                 return { ...state, products: state.products };        
             }
 
         case 'REMOVE_PRODUCT':
-            let orderToRemove = state.products.find(p => p.code == state.product);
+            let orderToRemove = state.products.find(p => p.code == state.currentProduct?.code);
             if (orderToRemove) {
                 orderToRemove.qty = orderToRemove.qty - 1;
-                const products = state.products.filter(p => p.code != state.product);
+                const products = state.products.filter(p => p.code != state.currentProduct?.code);
                 return { ...state, products: [...products, orderToRemove] };        
             }
             return { ...state, products: state.products };            

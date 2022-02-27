@@ -28,9 +28,9 @@ namespace VirtualReactShop
     {
         protected override IEnumerable<Currency> ListImpl() => new[]
         {
-            new Currency("AUD", "Australian Dollar", 1),
-            new Currency("USD", "United States Dollar", 1.41),
-            new Currency("CNY", "Chinese Renminbi", 5.02),
+            new Currency("AUD", "Australian Dollar", 1.00),
+            new Currency("USD", "United States Dollar", 0.72),
+            new Currency("CNY", "Chinese Renminbi", 5.00),
         };
     }
 }
