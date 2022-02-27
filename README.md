@@ -2,7 +2,7 @@
 
 ## Technologies used
 * .NET Framework
-* React.js (Typescript for type safety)
+* React.js (Typescript for type safety). The React root is in `VirtualReactShop.Web/ClientApp` folder.
 * Redux
 
 
