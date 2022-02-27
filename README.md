@@ -17,3 +17,5 @@
 
 The client app also can be launched in a hot reload mode (dev server) by running `npm run start` command in the `ClientApp` folder.
 
+![](./screenshots/cart.png)
+
