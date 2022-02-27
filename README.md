@@ -2,8 +2,9 @@
 
 ## Technologies used
 * .NET Framework
-* React.js
+* React.js (Typescript for type safety)
 * Redux
+
 
 ## Prerequisites
 * NET 5.0
