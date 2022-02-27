@@ -22,7 +22,11 @@ namespace VirtualReactShop
         public double Calculate(IReadOnlyCollection<Order> orders, string currencyCode)
         {
             var subtotal = orders.Sum(o => o.Product.PriceInBaseCurrency * o.Quantity);
+            return Calculate(subtotal, currencyCode);
+        }
 
+        public double Calculate(double subtotal, string currencyCode)
+        {
             var shippingRate = 0.0;
             foreach (var rate in _rates)
             {
@@ -33,7 +37,8 @@ namespace VirtualReactShop
             }
 
             var total = subtotal + shippingRate;
-            return Math.Round( _converter.Convert(total, Currency.BASE_CURRENCY /* AUD */, currencyCode), 2);
+            return Math.Round(_converter.Convert(total, Currency.BASE_CURRENCY /* AUD */, currencyCode), 2);
         }
+
     }
 }

@@ -20,6 +20,11 @@ export interface ShoppingCardState {
     currentCurrency: Currency;    
     currentProduct: Product | undefined;
     products:Product[];
+    total: number;
+}
+
+export interface Total {
+    amount: number;
 }
 
 export interface ListCurrenciesAction { type: 'LIST_CURRENCIES' }
@@ -31,7 +36,7 @@ export interface AddProductAction { type: 'ADD_PRODUCT' }
 export interface RemoveProductAction { type: 'REMOVE_PRODUCT' }
 export interface ChangeCurrencyAction { type: 'CHANGE_CURRENCY', currencyCode: string }
 export interface ClearCartAction { type: 'CLEAR_CART' }
-export interface CheckoutAction { type: 'CHECKOUT' }
+export interface CheckoutAction { type: 'CHECKOUT', total: number }
 export interface CalculateShippingAction { type: 'CALCULATE_SHIPPING', products: Product[], currencyCode: string }
 
 type KnownAction = ListCurrenciesAction |
@@ -78,10 +83,26 @@ export const actionCreators = {
     },
 
     checkout: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        // Only load data if it's something we don't already have (and are not already loading)
+        const appState = getState();
+
+        if (appState && appState.shoppingCart) {
+            const products = appState.shoppingCart.products.filter(p => p.qty > 0);
+            const payload = { orders: products, currencyCode: appState.shoppingCart.currentCurrency.code };
+
+            fetch('api/shipping', {
+                    method: 'post',
+                    body: JSON.stringify(payload),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json() as Promise<Total>)
+                .then(data => dispatch({type: 'CHECKOUT', total: data.amount}));
+        }
     },
 
     selectCurrency: (code: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        console.log('CHANGE_CURRENCY', code);
         dispatch({type: 'CHANGE_CURRENCY', currencyCode: code});
     },
 
@@ -132,12 +153,11 @@ const unloadedState: ShoppingCardState = {
     currentCurrency: { code: 'AUD', name: 'Australian Dollar', baseExchangeRate: 1.0 },  // TODO: get from server 
     currentProduct: undefined,
     isLoading: false,
-    products: []
+    products: [],
+    total: 0
 };
 
 export const reducer: Reducer<ShoppingCardState> = (state: ShoppingCardState | undefined, incomingAction: Action): ShoppingCardState => {
-    //console.log('SHOPPING CARD REDUCER');
-
     if (state === undefined) {
         return unloadedState;
     }
@@ -187,6 +207,9 @@ export const reducer: Reducer<ShoppingCardState> = (state: ShoppingCardState | u
                 return { ...state, products: [...products, orderToRemove] };        
             }
             return { ...state, products: state.products };            
+
+        case 'CHECKOUT':
+            return { ...state, total: action.total };
         }
 
     return state;

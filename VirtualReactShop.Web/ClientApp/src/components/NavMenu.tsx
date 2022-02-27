@@ -11,7 +11,7 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
     public render() {
         return (
             <header>
-                <Navbar className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3" light>
+                {/* <Navbar className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3" light>
                     <Container>
                         <NavbarBrand tag={Link} to="/">The Old (but Virtual) React Shop</NavbarBrand>
                         <NavbarToggler onClick={this.toggle} className="mr-2"/>
@@ -29,7 +29,7 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
                             </ul>
                         </Collapse>
                     </Container>
-                </Navbar>
+                </Navbar> */}
             </header>
         );
     }

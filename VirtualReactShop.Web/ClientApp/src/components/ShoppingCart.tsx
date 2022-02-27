@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
+import { NavItem, NavLink } from 'reactstrap';
 import { ApplicationState } from '../store';
 import * as ShoppingCardStore from '../store/ShoppingCart';
 
@@ -40,7 +41,7 @@ class ShoppingCart extends React.PureComponent<ShoppingCardProps> {
         <br />
         <button className="btn btn-secondary btn-lg" onClick={() => this.props.addProduct() }>Add Product</button>&nbsp;
         <button className="btn btn-secondary btn-lg" onClick={() => this.props.removeProduct() }>Remove Product</button>
-        <button className="btn btn-secondary btn-lg float-right" onClick={() => this.props.checkout() }>Checkout</button>
+        <NavLink tag={Link} className="btn btn-secondary btn-lg float-right" to="/checkout">Checkout</NavLink>
         <br />
         <br />
         {this.renderOrders()}
@@ -49,7 +50,6 @@ class ShoppingCart extends React.PureComponent<ShoppingCardProps> {
   }
 
   private ensureDataFetched() {
-    console.log('fetching data...');
     this.props.listCurrencies();
     this.props.listProducts();
   }
@@ -77,11 +77,9 @@ class ShoppingCart extends React.PureComponent<ShoppingCardProps> {
             }
           )}
           <tr>
-            <b>
-            <td>Subtotal</td>
+            <td><b>Subtotal</b></td>
             <td></td>
-            <td>{this.props.calcSum()}</td>
-            </b>
+            <td><b>{this.props.calcSum()}</b></td>
           </tr>
         </tbody>
       </table>
