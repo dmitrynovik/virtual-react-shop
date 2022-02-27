@@ -76,6 +76,13 @@ class ShoppingCart extends React.PureComponent<ShoppingCardProps> {
             </tr> : undefined;
             }
           )}
+          <tr>
+            <b>
+            <td>Subtotal</td>
+            <td></td>
+            <td>{this.props.calcSum()}</td>
+            </b>
+          </tr>
         </tbody>
       </table>
     );

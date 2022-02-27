@@ -49,9 +49,23 @@ type KnownAction = ListCurrenciesAction |
 export const actionCreators = { 
 
     calcPrice: (p: Product): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        const basePrice = Math.round(p.priceInBaseCurrency * p.qty * 100) / 100;
+        const basePrice = p.priceInBaseCurrency * p.qty;
         const state = getState();
-        return state.shoppingCart != undefined ? basePrice * state.shoppingCart.currentCurrency.baseExchangeRate : basePrice;
+        const price = state.shoppingCart != undefined ? basePrice * state.shoppingCart.currentCurrency.baseExchangeRate : basePrice;
+        return Math.round(price * 100.0) / 100.0; // Round to cents
+    },
+
+    calcSum: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        const state = getState();
+        let sum = 0;
+
+        state.shoppingCart?.products.forEach(p => {
+            const basePrice = p.priceInBaseCurrency * p.qty;
+            const state = getState();
+            sum += basePrice * (state.shoppingCart?.currentCurrency?.baseExchangeRate || 0);
+    
+        });
+        return Math.round(sum * 100) / 100;
     },
 
     addProduct: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
