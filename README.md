@@ -1,4 +1,5 @@
 # virtual-react-shop
+![](./screenshots/cart.png)
 
 ## Technologies used
 * .NET Framework
@@ -16,6 +17,4 @@
 * When launched, it opens the browser at `https://localhost:44305/` where the client app is presented (note: as it is run in IIS Express, accept the dev certificate);
 
 The client app also can be launched in a hot reload mode (dev server) by running `npm run start` command in the `ClientApp` folder.
-
-![](./screenshots/cart.png)
 
