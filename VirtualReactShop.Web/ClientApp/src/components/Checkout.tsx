@@ -22,7 +22,7 @@ class Checkout extends React.PureComponent<ShoppingCardProps> {
             <br />
             <h1>Checkout complete</h1>
             <div>
-                <b>Total: {this.props.total}</b>
+                <b>Total: {this.props.total} {this.props.currentCurrency.code}</b>
             </div>
             <p>Thanks you for you shopping</p>
         </div>
